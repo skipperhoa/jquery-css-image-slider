@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Slide Banner SK</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            var max_width = 1350;
+            var length_li = $(".box-img-slide>li").length;
+
+            var width_ul = max_width * length_li;
+            $("#slide-show").css({ "width": width_ul + "px" });
+            var show_banner = function () {
+
+                var postion = $("li.active-slide").position().left;
+
+            }
+            var i = 0;
+            var run_banner = function () {
+
+                var left = $(".box-img-slide").find("li.active-slide").position().left;
+                left = left + max_width;//2700
+                console.log(left + "/" + width_ul);
+                if (left == width_ul) {
+                    $(".box-img-slide li").removeClass("active-slide");
+                    $(".box-img-slide").css({ "left": "0" });
+                    $(".box-img-slide li:first-child").addClass("active-slide");
+                } else {
+                    var postion_li = left / max_width; //1 //2
+                    console.log(postion_li);
+                    var left_current = left //1350
+                    var check_postion = postion_li;
+                    if (postion_li == 1) {
+                        var left_current = (left * parseInt(postion_li)); //1350
+                        postion_li = 2;
+                    }
+                    if (postion_li == length_li) {
+                        postion_li--;
+                        $(".box-img-slide").css({ "left": -(left_current) + "px" });//-1350(2) 2700(3) 
+                        $(".box-img-slide li:first-child").addClass("active-slide");
+                        postion_li = 0;
+                    }
+                    else {
+                        $(".box-img-slide").css({ "left": -(left_current) + "px" });//-1350(2) 
+                        $(".box-img-slide li").removeClass("active-slide");
+                        if (check_postion == (length_li - 1)) {
+                            $(".box-img-slide li:last-child").addClass("active-slide");
+                        } else {
+                            $(".box-img-slide li:nth-child(" + postion_li + ")").addClass("active-slide");
+                        }
+                    }
+                    postion_li = 0;
+                    left = 0;
+                }
+            }
+            var myVar;
+            var init_banner = function () {
+                myVar = setInterval(run_banner, 8000);
+            }
+            function stop_banner() {
+                clearInterval(myVar);
+            }
+
+            //SET HOVER BANNER STOP IMAGE
+            $("#slide-show").hover(function () {
+                stop_banner();
+            }, function () {
+                 init_banner();
+             });
+
+            //CLICK BUTTON RIGHT
+            $(".btn-right-sk").click(function () {
+                stop_banner();
+                var left = $(".box-img-slide").find("li.active-slide").position().left; //0
+                left = left + max_width;
+                console.log(left);//2700
+                var position_left = left / max_width;  //2
+                var postion_left_tam = position_left; //1
+                position_left++;//3 //
+
+                if (left == width_ul) {
+                    $(".box-img-slide li").removeClass("active-slide");
+                    $(".box-img-slide").css({ "left": "0px" });//-1350(2) 2700(3) 
+                    $(".box-img-slide li:first-child").addClass("active-slide");
+                } else {
+                    if (postion_left_tam == (length_li - 1)) {
+                        $(".box-img-slide").css({ "left": -(left) + "px" });//-1350(2) 2700(3) 
+                        $(".box-img-slide li").removeClass("active-slide");
+                        $(".box-img-slide li:last-child").addClass("active-slide");
+                    } else {
+
+                        $(".box-img-slide li").removeClass("active-slide");
+                        $(".box-img-slide li:nth-child(" + position_left + ")").addClass("active-slide");
+                        $(".box-img-slide").css({ "left": -(left) + "px" });//-1350(2) 2700(3) 
+                    }
+
+                }
+                 init_banner();
+            });
+
+            //CLICK BUTTON LEFT
+            $(".btn-left-sk").click(function () {
+                stop_banner();
+                var left = $(".box-img-slide").find("li.active-slide").position().left; //-1350
+             
+                if (left != 0) {
+                    left =  (left) - max_width;//0 2700-1350
+                    left_tam = left;  //0
+                    console.log(left_tam);
+                    var position_left = (left / max_width); //2700  0
+                    var postion_left_tam = position_left; //1 0
+                    if (-(left) == width_ul) { //-1350   4050
+                        $(".box-img-slide li").removeClass("active-slide");
+                        // $(".box-img-slide").css({ "left":  "0px" });//-1350(2) 2700(3) 
+                        $(".box-img-slide li:last-child").addClass("active-slide");
+                    } else {
+                        $(".box-img-slide li").removeClass("active-slide");
+                        if (position_left == 0) {
+                            console.log(position_left);
+                            $(".box-img-slide li:first-child").addClass("active-slide");
+                        } else {
+                            position_left++;  //3 
+                            $(".box-img-slide li:nth-child(" + position_left + ")").addClass("active-slide");
+                        }
+
+
+
+                        var height_pre = -left_tam;
+                        $(".box-img-slide").css({ "left": height_pre + "px" });//-1350(2) 2700(3) 
+                    }
+                    init_banner();
+                }
+
+
+            });
+
+            //RUN BEGIN BANNER
+            setTimeout(init_banner(), 100);
+        });
+
+    </script>
+</head>
+
+<body>
+    <div class="banner-sk">
+        <div class="box-banner-sk">
+            <span class="btn-left-sk"></span>
+            <nav id="slide-show">
+                <ul class="box-img-slide">
+                    <li class="active-slide"><a href=""><img src="img/banner-1.jpg" /></a></li>
+                    <li><a href=""><img src="img/banner-2.jpg" /></a></li>
+                    <li><a href=""><img src="img/banner-3.jpg" /></a></li>
+                </ul>
+            </nav>
+            <span class="btn-right-sk"></span>
+        </div>
+    </div>
+</body>
+
+</html>
